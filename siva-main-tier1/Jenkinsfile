@@ -1,4 +1,1 @@
-node {
-  checkout scm
-  load('lib/tier1.groovy')('main')
-}
+tier1 'main'
