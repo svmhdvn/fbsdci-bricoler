@@ -1,1 +1,1 @@
-load('lib/test.groovy')('amd64/amd64', 'bhyve')
+test('amd64/amd64', 'bhyve')
