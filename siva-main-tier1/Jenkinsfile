@@ -1,1 +1,3 @@
-load('lib/tier1.groovy')('main')
+node {
+  load('lib/tier1.groovy')('main')
+}
