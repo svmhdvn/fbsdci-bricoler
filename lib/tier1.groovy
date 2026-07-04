@@ -13,7 +13,9 @@ def call(String branch) {
       stage('build') {
         steps {
           dir ("/exws/${JOB_NAME}/obj") {
-            tinderbox ['amd64', 'arm64', 'riscv']
+            script {
+              tinderbox ['amd64', 'arm64', 'riscv']
+            }
           }
         }
       }
