@@ -1,4 +1,5 @@
 def call(String branch) {
+  def tinderbox = load 'lib/tinderbox.groovy'
   pipeline {
     agent { label 'builder' }
     stages {
@@ -12,7 +13,7 @@ def call(String branch) {
       stage('build') {
         steps {
           dir ("/exws/${JOB_NAME}/obj") {
-            load('tinderbox.groovy')(['amd64', 'arm64', 'riscv'])
+            tinderbox ['amd64', 'arm64', 'riscv']
           }
         }
       }
