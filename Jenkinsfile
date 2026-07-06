@@ -22,19 +22,19 @@ pipeline {
         stage('amd64') {
           agent { label 'bhyve' }
           steps {
-            build "${BRANCH_NAME}-test-amd64"
+            build "test-amd64"
           }
         }
         stage('aarch64') {
           agent { label 'qemu' }
           steps {
-            build "${BRANCH_NAME}-test-aarch64"
+            build "test-aarch64"
           }
         }
         stage('riscv64') {
           agent { label 'qemu' }
           steps {
-            build "${BRANCH_NAME}-test-riscv64"
+            build "test-riscv64"
           }
         }
       }
