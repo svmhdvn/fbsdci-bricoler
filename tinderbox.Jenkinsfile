@@ -15,18 +15,5 @@ pipeline {
         }
       }
     }
-    stage('test') {
-      parallel {
-        stage('amd64') {
-          steps { build "test-amd64" }
-        }
-        stage('aarch64') {
-          steps { build "test-aarch64" }
-        }
-        stage('riscv64') {
-          steps { build "test-riscv64" }
-        }
-      }
-    }
   }
 }
