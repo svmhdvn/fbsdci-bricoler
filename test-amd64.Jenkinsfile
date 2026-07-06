@@ -1,1 +1,1 @@
-test 'arm64', 'aarch64'
+test 'amd64', 'amd64', 'bhyve'
