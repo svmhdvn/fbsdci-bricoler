@@ -22,27 +22,21 @@ pipeline {
         stage('amd64') {
           agent { label 'bhyve' }
           steps {
-            build "${branch}-test-amd64"
+            build "${BRANCH_NAME}-test-amd64"
           }
         }
         stage('aarch64') {
           agent { label 'qemu' }
           steps {
-            build "${branch}-test-aarch64"
+            build "${BRANCH_NAME}-test-aarch64"
           }
         }
         stage('riscv64') {
           agent { label 'qemu' }
           steps {
-            build "${branch}-test-riscv64"
+            build "${BRANCH_NAME}-test-riscv64"
           }
         }
-        //stage('aarch64') {
-        //  steps { build "siva-${branch}-aarch64-test" }
-        //}
-        //stage('riscv64') {
-        //  steps { build "siva-${branch}-riscv64-test" }
-        //}
       }
     }
   }
