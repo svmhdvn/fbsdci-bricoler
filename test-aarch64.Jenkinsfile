@@ -1,4 +1,1 @@
-test(
-  machine: 'arm64',
-  machineArch: 'aarch64'
-)
+test 'arm64', 'aarch64'

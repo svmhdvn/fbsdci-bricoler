@@ -1,4 +1,1 @@
-test(
-  machine: 'riscv',
-  machineArch: 'riscv64'
-)
+test 'riscv', 'riscv64'

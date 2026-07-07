@@ -1,5 +1,2 @@
-test(
-  machine: 'amd64',
-  machineArch: 'amd64',
+test 'amd64', 'amd64',
   hypervisor: 'bhyve'
-)
