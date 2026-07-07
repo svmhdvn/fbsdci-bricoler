@@ -1,3 +1,4 @@
 test 'amd64', 'amd64',
   hypervisor: 'bhyve',
-  extraSrcOpts: '-DWITH_DTRACE_TESTS'
+  extraSrcOpts: '-DWITH_DTRACE_TESTS',
+  tests: 'cddl/usr.sbin/dtrace'

@@ -1,1 +1,2 @@
-test 'riscv', 'riscv64'
+test 'riscv', 'riscv64',
+  tests: 'bin/echo'

@@ -3,6 +3,7 @@ def call(Map opts = [:], String machine, String machineArch) {
   opts.hypervisor = opts.hypervisor ?: 'qemu'
   opts.extraSrcOpts = opts.extraSrcOpts ?: ''
   opts.kernconf = opts.kernconf ?: 'GENERIC'
+  opts.tests = opts.tests ?: ''
 
   pipeline {
     agent { label "${opts.hypervisor}" }
@@ -21,7 +22,7 @@ bricoler -w ${WORKSPACE}/bricoler freebsd-regression-test-suite \
 --freebsd-vm-image/packages= \
 --freebsd-regression-test-suite/hypervisor="${opts.hypervisor}" \
 --freebsd-regression-test-suite/memory=${opts.memory} \
---freebsd-regression-test-suite/tests=bin/echo \
+--freebsd-regression-test-suite/tests=${opts.tests} \
 """
           sh "kyua report-junit -r ${WORKSPACE}/bricoler/freebsd-regression-test-suite/kyua.db > ${WORKSPACE}/kyua.junit.xml"
           junit stdioRetention: 'ALL', testResults: "kyua.junit.xml"

@@ -1,2 +1,3 @@
 test 'amd64', 'amd64',
-  hypervisor: 'bhyve'
+  hypervisor: 'bhyve',
+  tests: 'bin/echo'

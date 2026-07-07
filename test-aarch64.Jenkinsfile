@@ -1,1 +1,2 @@
-test 'arm64', 'aarch64'
+test 'arm64', 'aarch64',
+  tests: 'bin/echo'
