@@ -3,7 +3,13 @@ def call(Map opts = [:], String machine, String machineArch) {
   opts.hypervisor = opts.hypervisor ?: 'qemu'
   opts.extraSrcOpts = opts.extraSrcOpts ?: ''
   opts.kernconf = opts.kernconf ?: 'GENERIC'
-  opts.tests = opts.tests ?: ''
+  opts.task = opts.task ?: 'freebsd-regression-test-suite'
+
+  // Only override the tests parameter if they were explicitly requested.
+  // Some bricoler tasks request their own tests (e.g. dtrace or zfs tests)
+  if (opts.tests) {
+    opts.tests = "--freebsd-regression-test-suite/tests=${opts.tests}"
+  }
 
   pipeline {
     agent { label "${opts.hypervisor}" }
@@ -11,7 +17,7 @@ def call(Map opts = [:], String machine, String machineArch) {
       stage('test') {
         steps {
           sh """ \
-bricoler -w ${WORKSPACE}/bricoler freebsd-regression-test-suite \
+bricoler -w ${WORKSPACE}/bricoler ${opts.task} \
 --freebsd-src-git-checkout/branch= \
 --freebsd-src-git-checkout/url="/exws/${BRANCH_NAME}/src" \
 --freebsd-src-build/objdir="/exws/tinderbox/${BRANCH_NAME}/obj" \
@@ -22,7 +28,7 @@ bricoler -w ${WORKSPACE}/bricoler freebsd-regression-test-suite \
 --freebsd-vm-image/packages= \
 --freebsd-regression-test-suite/hypervisor="${opts.hypervisor}" \
 --freebsd-regression-test-suite/memory=${opts.memory} \
---freebsd-regression-test-suite/tests=${opts.tests} \
+${opts.tests} \
 """
           sh "kyua report-junit -r ${WORKSPACE}/bricoler/freebsd-regression-test-suite/kyua.db > ${WORKSPACE}/kyua.junit.xml"
           junit stdioRetention: 'ALL', testResults: "kyua.junit.xml"

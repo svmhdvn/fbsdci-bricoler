@@ -1,4 +1,3 @@
 test 'amd64', 'amd64',
-  hypervisor: 'bhyve',
-  extraSrcOpts: '-DWITH_DTRACE_TESTS',
-  tests: 'cddl/usr.sbin/dtrace'
+  task: 'freebsd-dtrace-test-suite',
+  hypervisor: 'bhyve'
