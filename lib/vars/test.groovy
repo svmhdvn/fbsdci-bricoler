@@ -8,7 +8,7 @@ def call(Map opts = [:], String machine, String machineArch) {
   // Only override the following parameters if they were explicitly requested.
   // Some bricoler tasks have their own specific config (e.g. dtrace or zfs tests)
   if (opts.tests) {
-    opts.tests = "--freebsd-regression-test-suite/tests='${opts.tests}'"
+    opts.tests = "--${opts.task}/tests='${opts.tests}'"
   }
 
   if (opts.packages) {
@@ -29,11 +29,11 @@ bricoler -w ${WORKSPACE}/bricoler ${opts.task} \
 --freebsd-src-build/make_options="-DWITHOUT_TOOLCHAIN -DWITHOUT_LIB32 -DWITHOUT_ZFS_TESTS -DWITHOUT_CROSS_COMPILER ${opts.extraSrcOpts}" \
 --freebsd-src-build/machine="${machine}" \
 --freebsd-src-build/kernel_config="${opts.kernconf}" \
---freebsd-regression-test-suite/hypervisor="${opts.hypervisor}" \
---freebsd-regression-test-suite/memory=${opts.memory} \
+--${opts.task}/hypervisor="${opts.hypervisor}" \
+--${opts.task}/memory=${opts.memory} \
 ${opts.tests} ${opts.packages} \
 """
-          sh "kyua report-junit -r ${WORKSPACE}/bricoler/freebsd-regression-test-suite/kyua.db > ${WORKSPACE}/kyua.junit.xml"
+          sh "kyua report-junit -r ${WORKSPACE}/bricoler/${opts.task}/kyua.db > ${WORKSPACE}/kyua.junit.xml"
           junit stdioRetention: 'ALL', testResults: "kyua.junit.xml"
         }
       }
