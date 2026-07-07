@@ -7,13 +7,8 @@ def call(Map opts = [:], String machine, String machineArch) {
 
   // Only override the following parameters if they were explicitly requested.
   // Some bricoler tasks have their own specific config (e.g. dtrace or zfs tests)
-  if (opts.tests) {
-    opts.tests = "--${opts.task}/tests='${opts.tests}'"
-  }
-
-  if (opts.packages) {
-    opts.packages = "--freebsd-vm-image/packages='${opts.packages}'"
-  }
+  opts.tests = opts.tests ? "--${opts.task}/tests='${opts.tests}'" : ''
+  opts.packages = opts.packages ? "--freebsd-vm-image/packages='${opts.packages}'" : ''
 
   pipeline {
     agent { label "${opts.hypervisor}" }
