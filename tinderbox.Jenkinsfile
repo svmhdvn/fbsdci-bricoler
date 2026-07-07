@@ -18,13 +18,13 @@ pipeline {
     stage('test') {
       parallel {
         stage('amd64') {
-          steps { build "test-amd64_${BRANCH_NAME}" }
+          steps { build "test-amd64/${BRANCH_NAME}" }
         }
         stage('aarch64') {
-          steps { build "test-aarch64_${BRANCH_NAME}" }
+          steps { build "test-aarch64/${BRANCH_NAME}" }
         }
         stage('riscv64') {
-          steps { build "test-riscv64_${BRANCH_NAME}" }
+          steps { build "test-riscv64/${BRANCH_NAME}" }
         }
       }
     }
