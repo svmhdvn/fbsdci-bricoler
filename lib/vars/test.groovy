@@ -1,7 +1,7 @@
 def call(
   String machine,
   String machineArch,
-  String extraSrcOpts = ''
+  String extraSrcOpts = '',
   String hypervisor = 'qemu',
   String kernconf = 'GENERIC',
   int memory = 4096
