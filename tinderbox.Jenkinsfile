@@ -15,5 +15,18 @@ pipeline {
         }
       }
     }
+    stage('test') {
+      parallel {
+        stage('amd64') {
+          steps { build "test-amd64_${BRANCH_NAME}" }
+        }
+        stage('aarch64') {
+          steps { build "test-aarch64_${BRANCH_NAME}" }
+        }
+        stage('riscv64') {
+          steps { build "test-riscv64_${BRANCH_NAME}" }
+        }
+      }
+    }
   }
 }

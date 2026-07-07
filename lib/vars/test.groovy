@@ -1,13 +1,12 @@
 def call(
   String machine,
   String machineArch,
-  String hypervisor = "qemu",
-  String kernconf = "GENERIC",
+  String hypervisor = 'qemu',
+  String kernconf = 'GENERIC',
   int memory = 4096
 ) {
   pipeline {
     agent { label "${hypervisor}" }
-    triggers { upstream upstreamProjects: "tinderbox_${BRANCH_NAME}", threshold: hudson.model.Result.SUCCESS }
     stages {
       stage('test') {
         steps {
