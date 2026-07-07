@@ -1,6 +1,6 @@
-test 'amd64', 'amd64',
-  hypervisor: 'bhyve',
+test "/exws/${BRANCH_NAME}/obj.tinderbox",
+  target: 'amd64/amd64',
+  kernconf: 'GENERIC-KASAN',
   extraSrcOpts: '-DWITHOUT_DTRACE_TESTS',
   packages: '',
-  kernconf: 'GENERIC-KASAN',
   tests: 'bin/echo'
