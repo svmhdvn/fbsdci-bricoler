@@ -1,1 +1,4 @@
-test 'riscv', 'riscv64'
+test(
+  machine: 'riscv',
+  machineArch: 'riscv64'
+)
