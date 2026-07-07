@@ -1,4 +1,4 @@
-def call(String machine, String machineArch, Map opts = [:]) {
+def call(Map opts = [:], String machine, String machineArch) {
   opts.memory = opts.memory ?: 4096
   opts.hypervisor = opts.hypervisor ?: 'qemu'
   opts.extraSrcOpts = opts.extraSrcOpts ?: ''
