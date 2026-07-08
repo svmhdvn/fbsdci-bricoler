@@ -1,19 +1,22 @@
 pipeline {
-  agent { label 'builder' }
+  agent any
   stages {
     stage('checkout') {
+      agent { label 'fetcher' }
       steps {
-        dir ("/exws/${BRANCH_NAME}/src") {
+        dir ("/exws/src/${BRANCH_NAME}") {
           git url: "ssh://siva@jailhost/home/siva/f/${BRANCH_NAME}", branch: "${BRANCH_NAME}", poll: false
         }
       }
     }
     stage('build') {
+      agent { label 'builder' }
       steps {
         script {
           //tinderbox ['amd64', 'arm64', 'riscv']
-          tinderbox "/exws/${BRANCH_NAME}/obj.tinderbox",
-            targets: ['amd64']
+          tinderbox "/exws/obj/${BRANCH_NAME}/tinderbox",
+            targets: ['amd64'],
+            kernconfs: ['GENERIC']
         }
       }
     }

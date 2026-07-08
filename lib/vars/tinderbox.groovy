@@ -24,7 +24,7 @@ def call(Map opts = [:], String objdir) {
   sh """ \
 bricoler -w ${WORKSPACE}/bricoler freebsd-src-build \
 --freebsd-src-git-checkout/branch= \
---freebsd-src-git-checkout/url=/exws/${BRANCH_NAME}/src \
+--freebsd-src-git-checkout/url="/exws/src/${BRANCH_NAME}" \
 --freebsd-src-build/objdir=${objdir} \
 --freebsd-src-build/clean=True \
 --freebsd-src-build/make_targets=tinderbox \
