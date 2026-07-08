@@ -28,12 +28,12 @@ bricoler -w ${WORKSPACE}/bricoler freebsd-src-build \
 --freebsd-src-build/objdir=${objdir} \
 --freebsd-src-build/clean=True \
 --freebsd-src-build/make_targets=tinderbox \
---freebsd-src-build/make_options="UNIVERSE_LOGDIR=${objdir} ${buildSrcOpts} ${targetOpts} ${kernconfsOpts}" \
+--freebsd-src-build/make_options="UNIVERSE_LOGDIR=${WORKSPACE} ${buildSrcOpts} ${targetOpts} ${kernconfsOpts}" \
 ${opts.toolchain} \
 """
-  archiveArtifacts "${objdir}/_.*"
+  archiveArtifacts "_.*"
   // TODO do I need a script{} here?
-  if (fileExists('${objdir}/_.tinderbox.failed')) {
-    error(readFile('${objdir}/_.tinderbox.failed'))
+  if (fileExists('_.tinderbox.failed')) {
+    error(readFile('_.tinderbox.failed'))
   }
 }
