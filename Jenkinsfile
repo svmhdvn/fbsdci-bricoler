@@ -12,7 +12,8 @@ pipeline {
       steps {
         script {
           //tinderbox ['amd64', 'arm64', 'riscv']
-          tinderbox ['amd64'], "/exws/${BRANCH_NAME}/obj.tinderbox"
+          tinderbox "/exws/${BRANCH_NAME}/obj.tinderbox",
+            targets: ['amd64']
         }
       }
     }
