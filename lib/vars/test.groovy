@@ -18,6 +18,7 @@ def call(Map opts = [:], String objdir) {
     stages {
       stage('test') {
         steps {
+          sh "scp artifact@ftpartifacts:"
           sh """ \
 bricoler -w ${WORKSPACE}/bricoler ${opts.task} \
 --freebsd-src-git-checkout/branch= \
