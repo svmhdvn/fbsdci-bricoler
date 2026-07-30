@@ -17,7 +17,7 @@ def call(Map opts = [:]) {
   }
 
   // Always build WITH dtrace tests, but install WITHOUT dtrace tests by default
-  def buildSrcOpts = '-DWITHOUT_TOOLCHAIN -DWITHOUT_LIB32 -DWITHOUT_ZFS_TESTS -DWITHOUT_CROSS_COMPILER -DWITH_DTRACE_TESTS'
+  def buildSrcOpts = '-DWITHOUT_CLANG -DWITHOUT_LLD -DWITHOUT_LLDB -DWITHOUT_LIB32 -DWITHOUT_ZFS_TESTS -DWITH_DTRACE_TESTS'
 
   def src = "${WORKSPACE}/src"
   def obj = "${WORKSPACE}/obj"
@@ -29,10 +29,9 @@ bricoler -w ${WORKSPACE}/bricoler freebsd-src-build \
 --freebsd-src-build/clean=True \
 --freebsd-src-build/make_targets=tinderbox \
 --freebsd-src-build/make_options="UNIVERSE_LOGDIR=${WORKSPACE} ${buildSrcOpts} ${targetOpts} ${kernconfsOpts}" \
-${opts.toolchain} \
+${opts.toolchain} || true \
 """
   archiveArtifacts "_.*"
-  // TODO do I need a script{} here?
   if (fileExists('_.tinderbox.failed')) {
     error(readFile('_.tinderbox.failed'))
   }
