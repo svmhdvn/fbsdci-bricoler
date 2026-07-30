@@ -31,10 +31,10 @@ bricoler -w ${WORKSPACE}/bricoler freebsd-src-build \
 --freebsd-src-build/make_options="UNIVERSE_LOGDIR=${WORKSPACE} ${buildSrcOpts} ${targetOpts} ${kernconfsOpts}" \
 ${opts.toolchain} \
 """
-  archiveArtifacts "universe_logs/_.*"
+  archiveArtifacts "_.*"
   // TODO do I need a script{} here?
-  if (fileExists('universe_logs/.tinderbox.failed')) {
-    error(readFile('universe_logs/.tinderbox.failed'))
+  if (fileExists('_.tinderbox.failed')) {
+    error(readFile('_.tinderbox.failed'))
   }
   sh "ls -1 '${obj}${src}' | xargs -P8 -I% tar --zstd -C ${obj} -cvf ${WORKSPACE}/obj.%.tar.zst ${obj}${src}/%"
 }
