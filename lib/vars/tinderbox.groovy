@@ -21,7 +21,6 @@ def call(Map opts = [:]) {
 
   def src = "${WORKSPACE}/src"
   def obj = "${WORKSPACE}/obj"
-  def logs = "${WORKSPACE}/universe_logs"
   sh """ \
 bricoler -w ${WORKSPACE}/bricoler freebsd-src-build \
 --freebsd-src-git-checkout/url=${src} \
@@ -29,7 +28,7 @@ bricoler -w ${WORKSPACE}/bricoler freebsd-src-build \
 --freebsd-src-build/objdir=${obj} \
 --freebsd-src-build/clean=True \
 --freebsd-src-build/make_targets=tinderbox \
---freebsd-src-build/make_options="UNIVERSE_LOGDIR=${logs} ${buildSrcOpts} ${targetOpts} ${kernconfsOpts}" \
+--freebsd-src-build/make_options="UNIVERSE_LOGDIR=${WORKSPACE} ${buildSrcOpts} ${targetOpts} ${kernconfsOpts}" \
 ${opts.toolchain} \
 """
   archiveArtifacts "universe_logs/_.*"
