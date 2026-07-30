@@ -12,7 +12,8 @@ pipeline {
             commitHash = scmVars.GIT_COMMIT
           }
           tinderbox targets: ['amd64', 'arm64', 'riscv'],
-            kernconfs: ['GENERIC']
+            kernconfs: ['GENERIC'],
+            toolchain: 'llvm23'
         }
       }
     }
