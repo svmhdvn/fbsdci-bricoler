@@ -13,7 +13,7 @@ pipeline {
           }
           tinderbox targets: ['amd64', 'arm64', 'riscv'],
             kernconfs: ['GENERIC'],
-            toolchain: 'llvm23'
+            toolchain: 'llvm21'
         }
       }
     }
