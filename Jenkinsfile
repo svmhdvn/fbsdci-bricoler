@@ -11,6 +11,7 @@ pipeline {
             def scmVars = git url: "ssh://siva@jailhost/home/siva/f/${BRANCH_NAME}", branch: "${BRANCH_NAME}", poll: false
             commitHash = scmVars.GIT_COMMIT
           }
+          echo "SIVA: commitHash = ${commitHash}"
           tinderbox targets: ['amd64', 'arm64', 'riscv'],
             kernconfs: ['GENERIC']
         }
