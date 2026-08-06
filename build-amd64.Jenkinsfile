@@ -1,1 +1,1 @@
-checkBuild 'amd64' 'amd64'
+checkBuild 'amd64', 'amd64'
