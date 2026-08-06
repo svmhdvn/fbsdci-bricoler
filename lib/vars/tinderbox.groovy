@@ -23,19 +23,28 @@ def call(Map opts = [:]) {
 
   def src = "${WORKSPACE}/src"
   def obj = "${WORKSPACE}/obj"
-  sh """ \
-bricoler -w ${WORKSPACE}/bricoler freebsd-src-build \
---freebsd-src-git-checkout/url=${src} \
---freebsd-src-git-checkout/branch= \
---freebsd-src-build/objdir=${obj} \
---freebsd-src-build/clean=True \
---freebsd-src-build/make_targets=tinderbox \
---freebsd-src-build/make_options="UNIVERSE_LOGDIR=${WORKSPACE} ${targetOpts} ${kernconfsOpts}" \
-${opts.toolchain} || true \
+  sh """
+bricoler -w ${WORKSPACE}/bricoler/tinderbox freebsd-src-build \
+  --freebsd-src-git-checkout/url=${src} \
+  --freebsd-src-git-checkout/branch= \
+  --freebsd-src-build/objdir=${obj} \
+  --freebsd-src-build/clean=True \
+  --freebsd-src-build/make_targets=tinderbox \
+  --freebsd-src-build/make_options="UNIVERSE_LOGDIR=${WORKSPACE} ${targetOpts} ${kernconfsOpts}" \
+  ${opts.toolchain} || true
 """
-  archiveArtifacts "_.*"
+
+  // Archive the logs for public use, then remove these artifacts locally to avoid
+  // future runs from picking up stale lingering logs.
+  archiveArtifacts '_.*'
   if (fileExists('_.tinderbox.failed')) {
-    error(readFile('_.tinderbox.failed'))
+    unstable(readFile('_.tinderbox.failed'))
   }
-  sh "ls -1 '${obj}${src}' | xargs -P8 -I% tar --zstd -C ${obj} -cvf ${WORKSPACE}/obj.%.tar.zst ${obj}${src}/%"
+
+  sh """
+rm -f _.*
+ls -1 '${obj}${src}' | xargs -P8 -I% tar --zstd -C ${obj}${src}/% -cf ${WORKSPACE}/obj.%.tar.zst .
+scp ${WORKSPACE}/obj.*.tar.zst artifact@ftpartifacts:
+"""
+
 }
