@@ -9,8 +9,8 @@ def call(Map opts = [:], String target, String targetArch) {
   opts.packages = opts.packages ? "--freebsd-vm-image/packages='${opts.packages}'" : ''
 
   def kernelConfig = opts.kernconf ? "--freebsd-src-build/kernel_config='${opts.kernconf}'" : ''
-  //def installSrcOpts = '-DWITHOUT_TOOLCHAIN -DWITHOUT_LIB32 -DWITHOUT_ZFS_TESTS -DWITHOUT_CROSS_COMPILER'
-  def makeOptions = opts.extraSrcOpts ? "--freebsd-src-build/make_options='${opts.extraSrcOpts}'" : ''
+  def installSrcOpts = '-DWITHOUT_CLANG -DWITHOUT_LLD -DWITHOUT_LLDB -DWITHOUT_LIB32 -DWITHOUT_ZFS_TESTS'
+  def makeOptions = opts.extraSrcOpts ?: ''
 
   pipeline {
     agent { label "${opts.hypervisor}" }
@@ -40,7 +40,8 @@ bricoler -w ${WORKSPACE}/bricoler ${opts.task} \
   --freebsd-src-build/make_targets='installworld installkernel distribution' \
   --${opts.task}/hypervisor='${opts.hypervisor}' \
   --${opts.task}/memory='${opts.memory}' \
-  ${makeOptions} ${kernelConfig} ${opts.tests} ${opts.packages}
+  --freebsd-src-build/make_options='${installSrcOpts} ${makeOptions}' \
+  ${kernelConfig} ${opts.tests} ${opts.packages}
 
 kyua report-junit -r ${WORKSPACE}/bricoler/${opts.task}/kyua.db > ${WORKSPACE}/kyua.junit.xml
 """

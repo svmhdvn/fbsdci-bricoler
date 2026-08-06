@@ -19,7 +19,7 @@ def call(Map opts = [:]) {
   // Always build WITH dtrace tests, but install WITHOUT dtrace tests by default
   // TODO currently can't do that because of bugs on aarch64 and riscv64
   //def buildSrcOpts = '-DWITHOUT_CLANG -DWITHOUT_LLD -DWITHOUT_LLDB -DWITHOUT_LIB32 -DWITHOUT_ZFS_TESTS -DWITH_DTRACE_TESTS'
-  //def buildSrcOpts = '-DWITHOUT_CLANG -DWITHOUT_LLD -DWITHOUT_LLDB -DWITHOUT_LIB32 -DWITHOUT_ZFS_TESTS'
+  def buildSrcOpts = '-DWITHOUT_CLANG -DWITHOUT_LLD -DWITHOUT_LLDB -DWITHOUT_LIB32 -DWITHOUT_ZFS_TESTS'
 
   def src = "${WORKSPACE}/src"
   def obj = "${WORKSPACE}/obj"
@@ -30,7 +30,7 @@ bricoler -w ${WORKSPACE}/bricoler/tinderbox freebsd-src-build \
   --freebsd-src-build/objdir=${obj} \
   --freebsd-src-build/clean=True \
   --freebsd-src-build/make_targets=tinderbox \
-  --freebsd-src-build/make_options="UNIVERSE_LOGDIR=${WORKSPACE} ${targetOpts} ${kernconfsOpts}" \
+  --freebsd-src-build/make_options="UNIVERSE_LOGDIR=${WORKSPACE} ${buildSrcOpts} ${targetOpts} ${kernconfsOpts}" \
   ${opts.toolchain} || true
 """
 
