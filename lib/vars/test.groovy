@@ -9,7 +9,7 @@ def call(Map opts = [:], String target, String targetArch) {
   opts.packages = opts.packages ? "--freebsd-vm-image/packages='${opts.packages}'" : ''
 
   def kernelConfig = opts.kernconf ? "--freebsd-src-build/kernel_config='${opts.kernconf}'" : ''
-  def installSrcOpts = '-DWITHOUT_CLANG -DWITHOUT_LLD -DWITHOUT_LLDB -DWITHOUT_LIB32 -DWITHOUT_ZFS_TESTS'
+  def installSrcOpts = '-DWITHOUT_SYSTEM_COMPILER -DWITHOUT_SYSTEM_LINKER -DWITHOUT_CLANG -DWITHOUT_LLD -DWITHOUT_LLDB -DWITHOUT_LIB32 -DWITHOUT_ZFS_TESTS'
   def makeOptions = opts.extraSrcOpts ?: ''
 
   pipeline {
