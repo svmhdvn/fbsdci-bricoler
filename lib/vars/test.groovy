@@ -10,7 +10,7 @@ def call(Map opts = [:], String target, String targetArch) {
 
   def kernelConfig = opts.kernconf ? "--freebsd-src-build/kernel_config='${opts.kernconf}'" : ''
   //def installSrcOpts = '-DWITHOUT_TOOLCHAIN -DWITHOUT_LIB32 -DWITHOUT_ZFS_TESTS -DWITHOUT_CROSS_COMPILER'
-  def makeOptions = opts.extraSrcOpts ? : "--freebsd-src-build/make_options='${opts.extraSrcOpts}'" : ''
+  def makeOptions = opts.extraSrcOpts ? "--freebsd-src-build/make_options='${opts.extraSrcOpts}'" : ''
 
   pipeline {
     agent { label "${opts.hypervisor}" }

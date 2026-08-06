@@ -20,10 +20,7 @@ pipeline {
         stage('amd64') {
           steps {
             build "build-amd64/${BRANCH_NAME}"
-            build "test-amd64/${BRANCH_NAME}",
-              parameters: [
-                string(name: 'SRC_COMMIT_HASH', value: commitHash)
-              ]
+            build "test-amd64/${BRANCH_NAME}", parameters: [string(name: 'SRC_COMMIT_HASH', value: commitHash)]
           }
         }
         //stage('aarch64') {
