@@ -11,7 +11,7 @@ def call(String target, String targetArch) {
               copyArtifacts filter: '_.*', projectName: "ci/${BRANCH_NAME}", selector: lastWithArtifacts()
               if (fileExists('_.tinderbox.failed')) {
                 def matcher = readFile('_.tinderbox.failed') =~ "${target}\\.${targetArch}.*failed, check .*/(.*) for details"
-                def errorLogs = matcher.collect { readFile(it[1]}) }.join('\n')
+                def errorLogs = matcher.collect { readFile(it[1]) }.join('\n')
                 error(errorLogs)
               }
             } finally {
