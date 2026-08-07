@@ -21,7 +21,10 @@ def call(Map opts = [:], String target, String targetArch) {
       stage('test') {
         steps {
           dir ("src") {
-            git url: "ssh://siva@jailhost/home/siva/f/${BRANCH_NAME}", branch: "${SRC_COMMIT_HASH}", poll: false, changelog: false
+            checkout changelog: false, poll: false,
+              scm: scmGit(
+                branches: [[name: "${SRC_COMMIT_HASH}"]],
+                userRemoteConfigs: [[url: "ssh://siva@jailhost/home/siva/f/${BRANCH_NAME}"]])
           }
 
           script {
