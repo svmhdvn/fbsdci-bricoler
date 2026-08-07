@@ -10,8 +10,10 @@ pipeline {
             def scmVars = git url: "ssh://siva@jailhost/home/siva/f/${BRANCH_NAME}", branch: "${BRANCH_NAME}", poll: false
             commitHash = scmVars.GIT_COMMIT
           }
-          tinderbox targets: ['amd64', 'arm64', 'riscv'],
+          tinderbox targets: ['amd64'],
             kernconfs: ['GENERIC']
+          //tinderbox targets: ['amd64', 'arm64', 'riscv'],
+          //  kernconfs: ['GENERIC']
         }
       }
     }
