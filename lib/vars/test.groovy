@@ -12,6 +12,10 @@ def call(Map opts = [:], String target, String targetArch) {
   def installSrcOpts = '-DWITHOUT_SYSTEM_COMPILER -DWITHOUT_SYSTEM_LINKER -DWITHOUT_CLANG -DWITHOUT_LLD -DWITHOUT_LLDB -DWITHOUT_LIB32 -DWITHOUT_ZFS_TESTS'
   def makeOptions = opts.extraSrcOpts ?: ''
 
+  def src = "${WORKSPACE}/src"
+  def obj = "${WORKSPACE}/obj"
+  def objRoot = "${obj}${src}/${target}.${targetArch}"
+
   pipeline {
     agent { label "${opts.hypervisor}" }
     parameters {
@@ -23,12 +27,10 @@ def call(Map opts = [:], String target, String targetArch) {
           dir ("src") {
             git url: "ssh://siva@jailhost/home/siva/f/${BRANCH_NAME}", branch: "${SRC_COMMIT_HASH}", poll: false, changelog: false
           }
-          def src = "${WORKSPACE}/src"
-          def obj = "${WORKSPACE}/obj"
-          def objRoot = "${obj}${src}/${target}.${targetArch}"
 
           sh """
 scp artifact@ftpartifacts:obj.${target}.${targetArch}.tar.zst ${WORKSPACE}
+rm -rf ${objRoot}
 mkdir -p ${objRoot}
 tar -C ${objRoot} -xf ${WORKSPACE}/obj.${target}.${targetArch}.tar.zst
 
