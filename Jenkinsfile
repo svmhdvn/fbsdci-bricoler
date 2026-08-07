@@ -1,4 +1,19 @@
 def commitHash = 'NONEXISTENTCOMMITHASH'
+//def targets = ['amd64', 'arm64', 'riscv']
+def targets = ['amd64']
+def kernconfs = ['GENERIC']
+
+// Always build WITH dtrace tests, but install WITHOUT dtrace tests by default
+// TODO currently can't do that because of bugs on aarch64 and riscv64
+def makeOptions = [
+  '-DWITHOUT_CLANG',
+  '-DWITHOUT_LIB32',
+  '-DWITHOUT_LLD',
+  '-DWITHOUT_LLDB',
+  '-DWITHOUT_SYSTEM_COMPILER',
+  '-DWITHOUT_SYSTEM_LINKER',
+  '-DWITHOUT_ZFS_TESTS',
+]
 
 pipeline {
   agent { label 'builder' }
@@ -10,10 +25,19 @@ pipeline {
             def scmVars = git url: "ssh://siva@jailhost/home/siva/f/${BRANCH_NAME}", branch: "${BRANCH_NAME}", poll: false
             commitHash = scmVars.GIT_COMMIT
           }
-          tinderbox targets: ['amd64'],
-            kernconfs: ['GENERIC']
-          //tinderbox targets: ['amd64', 'arm64', 'riscv'],
-          //  kernconfs: ['GENERIC']
+          tinderbox targets: targets,
+            kernconfs: kernconfs,
+            makeOptions: makeOptions
+        }
+      }
+    }
+    stage('VM image') {
+      steps {
+        script {
+          build "build-amd64/${BRANCH_NAME}"
+          vmImage 'amd64', 'amd64', 'GENERIC',
+            packages: [],
+            makeOptions: makeOptions
         }
       }
     }
@@ -21,7 +45,6 @@ pipeline {
       parallel {
         stage('amd64') {
           steps {
-            build "build-amd64/${BRANCH_NAME}"
             build job: "test-amd64/${BRANCH_NAME}",
               parameters: [
                 string(name: 'SRC_COMMIT_HASH', value: commitHash)
