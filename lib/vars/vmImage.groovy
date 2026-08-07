@@ -14,8 +14,7 @@ bricoler -w ${WORKSPACE}/bricoler freebsd-vm-image \
   --freebsd-src-build/machine='${target}/${targetArch}' \
   --freebsd-src-build/kernel_config='${kernconf}' \
   --freebsd-src-build/make_targets='installworld installkernel distribution' \
-  --freebsd-src-build/make_options="${installSrcOpts}" \
-  ${opts.toolchain} ${opts.packages}
+  ${installSrcOpts} ${opts.toolchain} ${opts.packages}
 scp ${WORKSPACE}/bricoler/freebsd-vm-image/image.${target}.${targetArch}.img artifact@ftpartifacts:
 """
 }
