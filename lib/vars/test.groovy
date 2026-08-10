@@ -29,7 +29,7 @@ def call(Map opts = [:], String target, String targetArch) {
 scp artifact@ftpartifacts:${objTarball} .
 rm -rf ${objRoot}
 mkdir -p ${objRoot}
-tar -C ${objRoot} -xf ${objTarball}
+tar -C ${objRoot} -xf ${WORKSPACE}/${objTarball}
 
 bricoler --workdir ${WORKSPACE}/bricoler ${opts.task} \
   --freebsd-src-git-checkout/url=/usr/src \
