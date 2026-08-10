@@ -1,8 +1,8 @@
 def call(Map opts = [:]) {
   def toolchain = opts.toolchain ? "--freebsd-src-build/toolchain=${opts.toolchain}" : ''
 
-  opts.targets = opts.targets ?: ['amd64', 'arm64', 'riscv64']
-  def targetOpts = opts.targets.collect { "TARGETS+=${it}" }.join(' ')
+  opts.targetTuples = opts.targetTuples ?: [['amd64', 'amd64'], ['arm64', 'aarch64'], ['riscv', 'riscv64']]
+  def targetOpts = opts.targetTuples.collect { "TARGETS+=${it[0]} TARGET_ARCHES_${it[0]}+=${it[1]}" }.join(' ')
 
   opts.kernconfs = opts.kernconfs ?: ['GENERIC', 'GENERIC-KASAN', 'GENERIC-KMSAN', 'LINT']
   def kernconfsOpts = opts.kernconfs.collect { "KERNCONFS+=${it}" }.join(' ')
@@ -27,9 +27,11 @@ bricoler freebsd-src-build \
     unstable(readFile('_.tinderbox.failed'))
   }
 
+  def objdirs = opts.targetTuples.collect { "${it[0]}.${it[1]}" }.join(' ')
+  def tarballsToCopy = opts.targetTuples.collect { "${WORKSPACE}/obj.${it[0]}.${it[1]}.tar.zst" }.join(' ')
   sh """
 rm -f _.*
-ls -1 /usr/obj/usr/src | grep -F '.' | xargs -P8 -I% tar --zstd -C /usr/obj/usr/src/% -cf ${WORKSPACE}/obj.%.tar.zst .
-scp ${WORKSPACE}/obj.*.tar.zst artifact@ftpartifacts:
+echo ${objdirs} | xargs -P8 -I% tar --zstd -C /usr/obj/usr/src/% -cf ${WORKSPACE}/obj.%.tar.zst .
+scp ${tarballsToCopy} artifact@ftpartifacts:
 """
 }

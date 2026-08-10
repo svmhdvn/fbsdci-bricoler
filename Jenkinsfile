@@ -1,6 +1,5 @@
 def commitHash = 'NONEXISTENTCOMMITHASH'
-//def targets = ['amd64', 'arm64', 'riscv']
-def targets = ['amd64']
+def targetTuples = [['amd64', 'amd64']]
 def kernconfs = ['GENERIC']
 
 // Always build WITH dtrace tests, but install WITHOUT dtrace tests by default
@@ -27,7 +26,7 @@ pipeline {
             def scmVars = git url: "ssh://siva@jailhost/home/siva/f/${BRANCH_NAME}", branch: "${BRANCH_NAME}", poll: false
             commitHash = scmVars.GIT_COMMIT
           }
-          tinderbox targets: targets,
+          tinderbox targetTuples: targetTuples,
             kernconfs: kernconfs,
             makeOptions: makeOptions
         }

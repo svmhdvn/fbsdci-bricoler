@@ -25,7 +25,7 @@ def call(Map opts = [:], String target, String targetArch) {
           // TODO convert this to a tarfs mount
           script {
             sh """
-scp artifact@ftpartifacts:obj.${target}.${targetArch}.zst .
+scp artifact@ftpartifacts:obj.${target}.${targetArch}.tar.zst .
 rm -rf ${objRoot}
 mkdir -p ${objRoot}
 tar -C ${objRoot} -xf ${WORKSPACE}/obj.${target}.${targetArch}.zst
