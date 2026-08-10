@@ -8,6 +8,7 @@ def call(Map opts = [:], String target, String targetArch) {
   def tests = opts.tests ? "--${opts.task}/tests='${opts.tests}'" : ''
   def kernelConfig = opts.kernconf ? "--freebsd-src-build/kernel_config='${opts.kernconf}'" : ''
   def objRoot = "/usr/obj/usr/src/${target}.${targetArch}"
+  def objTarball = "obj.${target}.${targetArch}.zst"
 
   // TODO FIGURE THIS OUT
   // --freebsd-src-build/make_options='${installSrcOpts} ${makeOptions}'
@@ -25,10 +26,10 @@ def call(Map opts = [:], String target, String targetArch) {
           // TODO convert this to a tarfs mount
           script {
             sh """
-scp artifact@ftpartifacts:obj.${target}.${targetArch}.tar.zst .
+scp artifact@ftpartifacts:${objTarball} .
 rm -rf ${objRoot}
 mkdir -p ${objRoot}
-tar -C ${objRoot} -xf ${WORKSPACE}/obj.${target}.${targetArch}.zst
+tar -C ${objRoot} -xf ${objTarball}
 
 bricoler --workdir ${WORKSPACE}/bricoler ${opts.task} \
   --freebsd-src-git-checkout/url=/usr/src \
