@@ -1,4 +1,4 @@
 test 'amd64', 'amd64',
   hypervisor: 'bhyve',
-  packages: [],
+  packages: [''],
   tests: ['bin/echo']
