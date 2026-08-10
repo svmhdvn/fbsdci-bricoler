@@ -8,7 +8,7 @@ def call(Map opts = [:], String target, String targetArch) {
   def tests = opts.tests ? "--${opts.task}/tests='${opts.tests}'" : ''
   def kernelConfig = opts.kernconf ? "--freebsd-src-build/kernel_config='${opts.kernconf}'" : ''
   def objRoot = "/usr/obj/usr/src/${target}.${targetArch}"
-  def objTarball = "obj.${target}.${targetArch}.zst"
+  def objTarball = "obj.${target}.${targetArch}.tar.zst"
 
   // TODO FIGURE THIS OUT
   // --freebsd-src-build/make_options='${installSrcOpts} ${makeOptions}'
