@@ -6,6 +6,7 @@ def call(Map opts = [:], String target, String targetArch) {
   // Only override the following parameters if they were explicitly requested.
   // Some bricoler tasks have their own specific config (e.g. dtrace or zfs tests)
   def tests = opts.tests ? "--${opts.task}/tests='${opts.tests}'" : ''
+  def packages = opts.packages ? "--freebsd-vm-image/packages='${opts.packages.join(' ')}'" : ''
   def kernelConfig = opts.kernconf ? "--freebsd-src-build/kernel_config='${opts.kernconf}'" : ''
   def objRoot = "/usr/obj/usr/src/${target}.${targetArch}"
   def objTarball = "obj.${target}.${targetArch}.tar.zst"
@@ -39,7 +40,7 @@ bricoler --workdir ${WORKSPACE}/bricoler ${opts.task} \
   --freebsd-src-build/make_targets='installworld installkernel distribution' \
   --${opts.task}/hypervisor='${opts.hypervisor}' \
   --${opts.task}/memory='${opts.memory}' \
-  ${kernelConfig} ${opts.tests} ${opts.packages}
+  ${kernelConfig} ${tests} ${packages}
 
 kyua report-junit -r ${WORKSPACE}/bricoler/${opts.task}/kyua.db > ${WORKSPACE}/kyua.junit.xml
 """
