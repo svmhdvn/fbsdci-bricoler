@@ -1,30 +1,19 @@
 def call(Map opts = [:]) {
   def toolchain = opts.toolchain ? "--freebsd-src-build/toolchain=${opts.toolchain}" : ''
 
-  // `make tinderbox` has its own list of machine/machineArch targets, so
-  // there's no need to list them explicitly.
-  def targetOpts = ''
-  if (opts.targets) {
-    for (t in opts.targets) {
-      targetOpts += " TARGETS+=${t}"
-    }
-  }
+  opts.targets = opts.targets ?: ['amd64', 'arm64', 'riscv64']
+  def targetOpts = opts.targets.collect { "TARGETS+=${it}" }.join(' ')
 
-  def kernconfs = opts.kernconfs ?: ['GENERIC', 'GENERIC-KASAN', 'GENERIC-KMSAN', 'LINT']
-  def kernconfsOpts = ''
-  for (k in kernconfs) {
-    kernconfsOpts += " KERNCONFS+=${k}"
-  }
+  opts.kernconfs = opts.kernconfs ?: ['GENERIC', 'GENERIC-KASAN', 'GENERIC-KMSAN', 'LINT']
+  def kernconfsOpts = opts.kernconfs.collect { "KERNCONFS+=${it}" }.join(' ')
 
   def buildSrcOpts = opts.makeOptions ? opts.makeOptions.join(' ') : ''
 
-  def src = "${WORKSPACE}/src"
-  def obj = "${WORKSPACE}/obj"
   sh """
-bricoler --workdir ${WORKSPACE}/bricoler freebsd-src-build \
-  --freebsd-src-git-checkout/url='${src}' \
+bricoler freebsd-src-build \
+  --freebsd-src-git-checkout/url=/usr/src \
   --freebsd-src-git-checkout/branch= \
-  --freebsd-src-build/objdir='${obj}' \
+  --freebsd-src-build/objdir=/usr/obj \
   --freebsd-src-build/clean=True \
   --freebsd-src-build/make_targets=tinderbox \
   --freebsd-src-build/make_options='UNIVERSE_LOGDIR=${WORKSPACE} ${buildSrcOpts} ${targetOpts} ${kernconfsOpts}' \
@@ -37,5 +26,10 @@ bricoler --workdir ${WORKSPACE}/bricoler freebsd-src-build \
   if (fileExists('_.tinderbox.failed')) {
     unstable(readFile('_.tinderbox.failed'))
   }
-  sh 'rm -f _.*'
+
+  sh """
+rm -f _.*
+ls -1 /usr/obj/usr/src | grep -F '.' | xargs -P8 -I% tar --zstd -C /usr/obj/usr/src/% -cf ${WORKSPACE}/obj.%.tar.zst .
+scp ${WORKSPACE}/obj.*.tar.zst artifact@ftpartifacts:
+"""
 }

@@ -6,6 +6,8 @@ def kernconfs = ['GENERIC']
 // Always build WITH dtrace tests, but install WITHOUT dtrace tests by default
 // TODO currently can't do that because of bugs on aarch64 and riscv64
 def makeOptions = [
+  '-DWITH_CCACHE_BUILD',
+  '-DWITH_CLEAN',
   '-DWITHOUT_CLANG',
   '-DWITHOUT_LIB32',
   '-DWITHOUT_LLD',
@@ -21,22 +23,12 @@ pipeline {
     stage('build') {
       steps {
         script {
-          dir ("src") {
+          dir ("/usr/src") {
             def scmVars = git url: "ssh://siva@jailhost/home/siva/f/${BRANCH_NAME}", branch: "${BRANCH_NAME}", poll: false
             commitHash = scmVars.GIT_COMMIT
           }
           tinderbox targets: targets,
             kernconfs: kernconfs,
-            makeOptions: makeOptions
-        }
-      }
-    }
-    stage('VM image') {
-      steps {
-        script {
-          build "build-amd64/${BRANCH_NAME}"
-          vmImage 'amd64', 'amd64', 'GENERIC',
-            packages: [],
             makeOptions: makeOptions
         }
       }
