@@ -5,7 +5,7 @@ def call(Map opts = [:], String target, String targetArch) {
 
   // Only override the following parameters if they were explicitly requested.
   // Some bricoler tasks have their own specific config (e.g. dtrace or zfs tests)
-  def tests = opts.tests ? "--${opts.task}/tests='${opts.tests}'" : ''
+  def tests = opts.tests ? "--${opts.task}/tests='${opts.tests.join(' ')}'" : ''
   def packages = opts.packages ? "--freebsd-vm-image/packages='${opts.packages.join(' ')}'" : ''
   def kernelConfig = opts.kernconf ? "--freebsd-src-build/kernel_config='${opts.kernconf}'" : ''
   def objRoot = "/usr/obj/usr/src/${target}.${targetArch}"
