@@ -31,7 +31,7 @@ bricoler freebsd-src-build \
   def tarballsToCopy = opts.targetTuples.collect { "${WORKSPACE}/obj.${it[0]}.${it[1]}.tar.zst" }.join(' ')
   sh """
 rm -f _.*
-echo ${objdirs} | xargs -P8 -I% tar --zstd -C /usr/obj/usr/src/% -cf ${WORKSPACE}/obj.%.tar.zst .
+echo ${objdirs} | xargs -P8 -n1 -I% tar --zstd -C /usr/obj/usr/src/% -cf ${WORKSPACE}/obj.%.tar.zst .
 scp ${tarballsToCopy} artifact@ftpartifacts:
 """
 }
