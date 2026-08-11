@@ -1,5 +1,5 @@
 def commitHash = 'NONEXISTENTCOMMITHASH'
-def targetTuples = [['amd64', 'amd64']]
+def targetTuples = [['amd64', 'amd64'], ['arm64', 'aarch64'], ['riscv', 'riscv64']]
 def kernconfs = ['GENERIC']
 
 // Always build WITH dtrace tests, but install WITHOUT dtrace tests by default
@@ -42,12 +42,22 @@ pipeline {
               ]
           }
         }
-        //stage('aarch64') {
-        //  steps { build "test-aarch64/${BRANCH_NAME}" }
-        //}
-        //stage('riscv64') {
-        //  steps { build "test-riscv64/${BRANCH_NAME}" }
-        //}
+        stage('aarch64') {
+          steps {
+            build job: "test-aarch64/${BRANCH_NAME}",
+              parameters: [
+                string(name: 'SRC_COMMIT_HASH', value: commitHash)
+              ]
+          }
+        }
+        stage('riscv64') {
+          steps {
+            build job: "test-riscv64/${BRANCH_NAME}",
+              parameters: [
+                string(name: 'SRC_COMMIT_HASH', value: commitHash)
+              ]
+          }
+        }
         //stage('dtrace') {
         //  steps { build "dtrace-test-amd64/${BRANCH_NAME}" }
         //}
