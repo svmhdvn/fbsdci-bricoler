@@ -1,4 +1,4 @@
 test 'riscv', 'riscv64',
-  hypervisor: 'bhyve',
+  hypervisor: 'qemu',
   packages: [''],
   tests: ['bin/echo']
