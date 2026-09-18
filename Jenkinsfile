@@ -61,7 +61,7 @@ pipeline {
         }
         stage('dtrace amd64') {
           steps {
-            build "dtrace-test-amd64/${BRANCH_NAME}",
+            build job: "dtrace-test-amd64/${BRANCH_NAME}",
               parameters: [
                 string(name: 'SRC_COMMIT_HASH', value: commitHash)
               ]
@@ -69,7 +69,7 @@ pipeline {
         }
         stage('dtrace aarch64') {
           steps {
-            build "dtrace-test-aarch64/${BRANCH_NAME}",
+            build job: "dtrace-test-aarch64/${BRANCH_NAME}",
               parameters: [
                 string(name: 'SRC_COMMIT_HASH', value: commitHash)
               ]
@@ -77,7 +77,7 @@ pipeline {
         }
         stage('dtrace riscv64') {
           steps {
-            build "dtrace-test-riscv64/${BRANCH_NAME}",
+            build job: "dtrace-test-riscv64/${BRANCH_NAME}",
               parameters: [
                 string(name: 'SRC_COMMIT_HASH', value: commitHash)
               ]

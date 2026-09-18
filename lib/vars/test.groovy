@@ -24,13 +24,13 @@ def call(Map opts = [:], String target, String targetArch) {
           dir ("/usr/src") {
             git url: "ssh://siva@jailhost/home/siva/f/${BRANCH_NAME}", branch: "${BRANCH_NAME}", poll: false, changelog: false
           }
-          // TODO convert this to a tarfs mount
           script {
+            // TODO switch 'doas' to 'mdo' once jail permissions are figured out
             sh """
 scp artifact@ftpartifacts:${objTarball} .
-rm -rf ${objRoot}
+doas umount -f ${objRoot} || true
 mkdir -p ${objRoot}
-tar -C ${objRoot} -xf ${WORKSPACE}/${objTarball}
+doas mount -t tarfs ${WORKSPACE}/${objTarball} ${objRoot}
 
 bricoler --workdir ${WORKSPACE}/bricoler ${opts.task} \
   --freebsd-src-git-checkout/url=/usr/src \
@@ -41,6 +41,8 @@ bricoler --workdir ${WORKSPACE}/bricoler ${opts.task} \
   --${opts.task}/hypervisor='${opts.hypervisor}' \
   --${opts.task}/memory='${opts.memory}' \
   ${kernelConfig} ${tests} ${packages}
+
+doas umount -f ${objRoot} || true
 
 kyua report-junit -r ${WORKSPACE}/bricoler/${opts.task}/kyua.db > ${WORKSPACE}/kyua.junit.xml
 """
