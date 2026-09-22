@@ -16,6 +16,7 @@ def makeOptions = [
 ]
 
 pipeline {
+  agent any
   stages {
     stage('build') {
       agent { label 'builder' }
