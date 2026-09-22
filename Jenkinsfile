@@ -3,18 +3,6 @@ def targetTuples = [['amd64', 'amd64'], ['arm64', 'aarch64'], ['riscv', 'riscv64
 //def targetTuples = [['amd64', 'amd64']]
 def kernconfs = ['GENERIC']
 
-// Always build WITH dtrace tests, but install WITHOUT dtrace tests by default
-def makeOptions = [
-  '-DWITH_CCACHE_BUILD',
-  '-DWITH_CLEAN',
-  '-DWITH_DTRACE_TESTS',
-  '-DWITHOUT_TOOLCHAIN',
-  '-DWITHOUT_LIB32',
-  '-DWITHOUT_SYSTEM_COMPILER',
-  '-DWITHOUT_SYSTEM_LINKER',
-  '-DWITHOUT_ZFS_TESTS',
-]
-
 pipeline {
   agent any
   stages {
@@ -28,7 +16,7 @@ pipeline {
           }
           tinderbox targetTuples: targetTuples,
             kernconfs: kernconfs,
-            makeOptions: makeOptions,
+            makeOptions: buildMakeOptions,
             toolchain: 'llvm21' // TODO TMP for improving speed
         }
       }
