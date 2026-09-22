@@ -1,5 +1,6 @@
 // Always build WITH dtrace tests...
 // TODO we need to build a toolchain for dtrace tests to work, do that later
+@groovy.transform.Field
 def buildMakeOptions = [
   '-DWITH_CCACHE_BUILD',
   '-DWITH_CLEAN',
@@ -12,6 +13,7 @@ def buildMakeOptions = [
 ]
 
 // ...but install WITHOUT dtrace tests by default
+@groovy.transform.Field
 def defaultInstallMakeOptions = [
   '-DWITHOUT_DTRACE_TESTS',
   '-DWITHOUT_TOOLCHAIN',
@@ -19,6 +21,7 @@ def defaultInstallMakeOptions = [
   '-DWITHOUT_ZFS_TESTS',
 ]
 
+@groovy.transform.Field
 def dtraceInstallMakeOptions = [
   '-DWITH_DTRACE_TESTS',
   '-DWITHOUT_TOOLCHAIN',
