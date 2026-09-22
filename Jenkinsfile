@@ -8,19 +8,17 @@ def makeOptions = [
   '-DWITH_CCACHE_BUILD',
   '-DWITH_CLEAN',
   '-DWITH_DTRACE_TESTS',
-  '-DWITHOUT_CLANG',
+  '-DWITHOUT_TOOLCHAIN',
   '-DWITHOUT_LIB32',
-  '-DWITHOUT_LLD',
-  '-DWITHOUT_LLDB',
   '-DWITHOUT_SYSTEM_COMPILER',
   '-DWITHOUT_SYSTEM_LINKER',
   '-DWITHOUT_ZFS_TESTS',
 ]
 
 pipeline {
-  agent { label 'builder' }
   stages {
     stage('build') {
+      agent { label 'builder' }
       steps {
         script {
           dir ("/usr/src") {
@@ -29,7 +27,8 @@ pipeline {
           }
           tinderbox targetTuples: targetTuples,
             kernconfs: kernconfs,
-            makeOptions: makeOptions
+            makeOptions: makeOptions,
+            toolchain: 'llvm21' // TODO TMP for improving speed
         }
       }
     }

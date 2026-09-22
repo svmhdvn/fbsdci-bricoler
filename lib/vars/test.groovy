@@ -24,7 +24,6 @@ def call(Map opts = [:], String target, String targetArch) {
           dir ("/usr/src") {
             git url: "ssh://siva@jailhost/home/siva/f/${BRANCH_NAME}", branch: "${BRANCH_NAME}", poll: false, changelog: false
           }
-          // TODO convert this to a tarfs mount
           script {
             sh """
 scp artifact@ftpartifacts:${objTarball} .
