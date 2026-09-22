@@ -16,7 +16,7 @@ pipeline {
           }
           tinderbox targetTuples: targetTuples,
             kernconfs: kernconfs,
-            makeOptions: buildMakeOptions,
+            makeOptions: config.buildMakeOptions,
             toolchain: 'llvm21' // TODO TMP for improving speed
         }
       }

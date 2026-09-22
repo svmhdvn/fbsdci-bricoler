@@ -1,4 +1,4 @@
 test 'riscv', 'riscv64',
-  makeOptions: dtraceInstallMakeOptions,
+  makeOptions: config.dtraceInstallMakeOptions,
   task: 'freebsd-dtrace-test-suite',
   hypervisor: 'qemu'

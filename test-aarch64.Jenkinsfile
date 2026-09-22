@@ -1,5 +1,5 @@
 test 'arm64', 'aarch64',
-  makeOptions: defaultInstallMakeOptions,
+  makeOptions: config.defaultInstallMakeOptions,
   hypervisor: 'qemu',
   packages: [''],
   tests: ['bin/echo']

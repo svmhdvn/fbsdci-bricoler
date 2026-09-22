@@ -1,5 +1,5 @@
 test 'riscv', 'riscv64',
-  makeOptions: defaultInstallMakeOptions,
+  makeOptions: config.defaultInstallMakeOptions,
   hypervisor: 'qemu',
   packages: [''],
   tests: ['bin/echo']

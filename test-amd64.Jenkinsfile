@@ -1,5 +1,5 @@
 test 'amd64', 'amd64',
-  makeOptions: defaultInstallMakeOptions,
+  makeOptions: config.defaultInstallMakeOptions,
   hypervisor: 'bhyve',
   packages: [''],
   tests: ['bin/echo']
