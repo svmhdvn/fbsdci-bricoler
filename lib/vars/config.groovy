@@ -5,7 +5,6 @@ def buildMakeOptions = [
   '-DWITH_CCACHE_BUILD',
   '-DWITH_CLEAN',
   '-DWITH_DTRACE_TESTS',
-  '-DWITHOUT_TOOLCHAIN',
   '-DWITHOUT_LIB32',
   '-DWITHOUT_SYSTEM_COMPILER',
   '-DWITHOUT_SYSTEM_LINKER',
@@ -16,7 +15,6 @@ def buildMakeOptions = [
 @groovy.transform.Field
 def defaultInstallMakeOptions = [
   '-DWITHOUT_DTRACE_TESTS',
-  '-DWITHOUT_TOOLCHAIN',
   '-DWITHOUT_LIB32',
   '-DWITHOUT_ZFS_TESTS',
 ]
@@ -24,7 +22,6 @@ def defaultInstallMakeOptions = [
 @groovy.transform.Field
 def dtraceInstallMakeOptions = [
   '-DWITH_DTRACE_TESTS',
-  '-DWITHOUT_TOOLCHAIN',
   '-DWITHOUT_LIB32',
   '-DWITHOUT_ZFS_TESTS',
 ]
