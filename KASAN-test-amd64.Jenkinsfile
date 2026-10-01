@@ -1,7 +1,6 @@
-test "/exws/obj/${BRANCH_NAME}/tinderbox",
-  target: 'amd64/amd64',
+test 'amd64', 'amd64',
+  makeOptions: config.defaultInstallMakeOptions,
   hypervisor: 'bhyve',
   kernconf: 'GENERIC-KASAN',
-  extraSrcOpts: '-DWITHOUT_DTRACE_TESTS',
-  packages: '',
-  tests: 'bin/echo'
+  packages: [''],
+  tests: ['bin/echo']

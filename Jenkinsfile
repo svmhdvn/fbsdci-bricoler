@@ -4,7 +4,7 @@ def targetTuples = [['amd64', 'amd64'], ['arm64', 'aarch64'], ['riscv', 'riscv64
 def kernconfs = ['GENERIC']
 
 pipeline {
-  agent any
+  agent { label 'orchestrator' }
   stages {
     stage('build') {
       agent { label 'builder' }
