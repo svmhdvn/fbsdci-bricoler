@@ -32,6 +32,6 @@ bricoler freebsd-src-build \
   sh """
 rm -f _.*
 ssh artifact@ftpartifacts 'mkdir -p "${commitHash}"'
-echo ${objdirs} | xargs -n1 -I% sh -c 'tar -C /usr/obj/usr/src/% -cf - . | zstd -o - | ssh artifact@ftpartifacts "cat - > ${commitHash}/obj.%.tar.zst"'
+echo ${objdirs} | xargs -n1 -I% sh -c 'tar -C /usr/obj/usr/src/% -cf - . | zstd -c | ssh artifact@ftpartifacts "cat - > ${commitHash}/obj.%.tar.zst"'
 """
 }
