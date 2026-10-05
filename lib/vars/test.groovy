@@ -26,10 +26,10 @@ def call(Map opts = [:], String target, String targetArch) {
           }
           script {
             sh """
-scp artifact@ftpartifacts:${objTarball} .
 rm -rf ${objRoot}
 mkdir -p ${objRoot}
-tar -C ${objRoot} -xf ${WORKSPACE}/${objTarball}
+
+ssh artifact@ftpartifacts 'cat ${SRC_COMMIT_HASH}/${objTarball}' | tar --zstd -C ${objRoot} -xf -'
 
 bricoler --workdir ${WORKSPACE}/bricoler ${opts.task} \
   --freebsd-src-git-checkout/url=/usr/src \

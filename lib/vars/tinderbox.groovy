@@ -1,4 +1,4 @@
-def call(Map opts = [:]) {
+def call(Map opts = [:], String commitHash) {
   def toolchain = opts.toolchain ? "--freebsd-src-build/toolchain=${opts.toolchain}" : ''
 
   opts.targetTuples = opts.targetTuples ?: [['amd64', 'amd64'], ['arm64', 'aarch64'], ['riscv', 'riscv64']]
@@ -31,7 +31,7 @@ bricoler freebsd-src-build \
   def tarballsToCopy = opts.targetTuples.collect { "${WORKSPACE}/obj.${it[0]}.${it[1]}.tar.zst" }.join(' ')
   sh """
 rm -f _.*
-echo ${objdirs} | xargs -P8 -n1 -I% tar --zstd -C /usr/obj/usr/src/% -cf ${WORKSPACE}/obj.%.tar.zst .
-scp ${tarballsToCopy} artifact@ftpartifacts:
+ssh artifact@ftpartifacts 'mkdir -p "${commitHash}"'
+echo ${objdirs} | xargs -n1 -I% sh -c 'tar --zstd -C /usr/obj/usr/src/% -cf - . | ssh artifact@ftpartifacts "cat - > ${commitHash}/obj.%.tar.zst"'
 """
 }

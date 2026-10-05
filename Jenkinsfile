@@ -14,7 +14,8 @@ pipeline {
             def scmVars = git url: "ssh://siva@jailhost/home/siva/f/${BRANCH_NAME}", branch: "${BRANCH_NAME}", poll: false
             commitHash = scmVars.GIT_COMMIT
           }
-          tinderbox targetTuples: targetTuples,
+          tinderbox commitHash,
+            targetTuples: targetTuples,
             kernconfs: kernconfs,
             makeOptions: config.buildMakeOptions,
             toolchain: 'llvm21' // TODO TMP for improving speed
