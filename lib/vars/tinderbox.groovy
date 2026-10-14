@@ -28,10 +28,12 @@ bricoler freebsd-src-build \
   }
 
   def objdirs = opts.targetTuples.collect { "${it[0]}.${it[1]}" }.join(' ')
-  def tarballsToCopy = opts.targetTuples.collect { "${WORKSPACE}/obj.${it[0]}.${it[1]}.tar.zst" }.join(' ')
   sh """
 rm -f _.*
-ssh artifact@ftpartifacts 'mkdir -p "${commitHash}"'
-echo ${objdirs} | xargs -n1 -I% sh -c 'tar -C /usr/obj/usr/src/% -cf - . | zstd -c | ssh artifact@ftpartifacts "cat - > ${commitHash}/obj.%.tar.zst"'
+echo ${objdirs} | xargs -P8 -n1 -I% tar --zstd -C /usr/obj/usr/src/% -cf ${WORKSPACE}/obj.%.tar.zst .
 """
+
+  def tarballsToCopy = opts.targetTuples.collect { "${WORKSPACE}/obj.${it[0]}.${it[1]}.tar.zst" }.join(',')
+  ftpPublisher publishers: [[configName: 'ftpartifacts', transfers: [[remoteDirectory: commitHash, sourceFiles: tarballsToCopy]]]]
+  sh "rm -f ${WORKSPACE}/obj.*.tar.zst"
 }
