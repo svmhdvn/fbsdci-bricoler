@@ -23,18 +23,19 @@ bricoler freebsd-src-build \
   // Archive the logs for public use, then remove these artifacts locally to avoid
   // future runs from picking up stale lingering logs.
   archiveArtifacts '_.*'
-  recordIssues sourceCodeRetention: 'LAST_BUILD', tools: [clang(pattern: '_.*')]
+  recordIssues quiet: true, sourceCodeRetention: 'LAST_BUILD', tools: [clang(pattern: '_.*')]
   if (fileExists('_.tinderbox.failed')) {
     unstable(readFile('_.tinderbox.failed'))
   }
 
   def objdirs = opts.targetTuples.collect { "${it[0]}.${it[1]}" }.join(' ')
+  //def tarballsToCopy = opts.targetTuples.collect { "${WORKSPACE}/obj.${it[0]}.${it[1]}.tar.zst" }.join(' ')
+  def ftpUrl = 'ftp://ftpuser@ftpartifacts'
   sh """
+echo mkdir ${commitHash} | ftp ${ftpUrl}
+echo ${objdirs} | xargs -n1 -I% sh -c 'tar -C /usr/obj/usr/src/% -cf - . | zstd -c | ftp -u ${ftpUrl}/${commitHash}/obj.%.tar.zst -'
+ftp -u ${ftpUrl}/${commitHash}/ _.*
+echo dir ${commitHash} | ftp ${ftpUrl}
 rm -f _.*
-echo ${objdirs} | xargs -P8 -n1 -I% tar --zstd -C /usr/obj/usr/src/% -cf ${WORKSPACE}/obj.%.tar.zst .
 """
-
-  def tarballsToCopy = opts.targetTuples.collect { "${WORKSPACE}/obj.${it[0]}.${it[1]}.tar.zst" }.join(',')
-  ftpPublisher publishers: [[configName: 'ftpartifacts', transfers: [[remoteDirectory: commitHash, sourceFiles: tarballsToCopy]]]]
-  sh "rm -f ${WORKSPACE}/obj.*.tar.zst"
 }
