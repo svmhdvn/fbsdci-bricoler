@@ -23,6 +23,7 @@ bricoler freebsd-src-build \
   // Archive the logs for public use, then remove these artifacts locally to avoid
   // future runs from picking up stale lingering logs.
   archiveArtifacts '_.*'
+  recordIssues sourceCodeRetention: 'LAST_BUILD', tools: [clang(pattern: '_.*')]
   if (fileExists('_.tinderbox.failed')) {
     unstable(readFile('_.tinderbox.failed'))
   }
